@@ -10,18 +10,12 @@ load_dotenv()
 
 # create the database tables and establish a connection
 Base.metadata.create_all(bind=engine)
-
-def get_db():
-    db = None
-    try:
-        db = Session()
-        print("Database connection established")
-        yield db
-    except Exception as e:
-        print("Error connecting to the database:", e)
-        db.close()
+from dependencies import get_db
 
 app = FastAPI()
+
+from routers import users
+app.include_router(users.router, prefix="/users", tags=["users"])
 
 app.add_middleware(
     CORSMiddleware,
