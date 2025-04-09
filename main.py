@@ -1,10 +1,21 @@
 import uvicorn
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import os
+from db import Base, engine
 
 load_dotenv()
 
+# create the database tables and establish a connection
+Base.metadata.create_all(bind=engine)
+db = None
+try:
+    db = Session()
+except Exception as e:
+    print("Error connecting to the database:", e)
+    db.close()
 
 app = FastAPI()
 
