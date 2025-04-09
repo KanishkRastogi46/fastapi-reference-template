@@ -10,14 +10,26 @@ load_dotenv()
 
 # create the database tables and establish a connection
 Base.metadata.create_all(bind=engine)
-db = None
-try:
-    db = Session()
-except Exception as e:
-    print("Error connecting to the database:", e)
-    db.close()
+
+def get_db():
+    db = None
+    try:
+        db = Session()
+        print("Database connection established")
+        yield db
+    except Exception as e:
+        print("Error connecting to the database:", e)
+        db.close()
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/hello/{name}")
@@ -32,3 +44,4 @@ def index(request: Request, name: str, q: str = None):
 
 if __name__ == "__main__":
     uvicorn.run(app=app)
+    get_db()
