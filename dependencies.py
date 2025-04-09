@@ -1,5 +1,4 @@
 from typing import Annotated
-from sqlalchemy.orm import Session
 from jwt import encode, decode
 from jwt.exceptions import InvalidTokenError
 from datetime import datetime, timedelta, timezone
@@ -10,6 +9,7 @@ load_dotenv()
 # create your dependencies here
 
 def get_db():
+    from db import Session
     db = Session()
     print("Database connection established")
     try:
