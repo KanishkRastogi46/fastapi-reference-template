@@ -5,3 +5,5 @@ python-dotenv
 sqlalchemy
 pyjwt
 passlib[bcrypt]
+jinja2
+fastapi-limiter
